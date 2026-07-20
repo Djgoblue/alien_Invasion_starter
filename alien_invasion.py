@@ -52,7 +52,6 @@ class AlienInvasion:
         if self.ship.check_collisions(self.alien_fleet.fleet):
             self._reset_level()
             # subtract one life if possible
-        
         # check collisions for aliens and bottom of screen
         if self.ship.check_fleet_bottom():
             self._reset_level()
