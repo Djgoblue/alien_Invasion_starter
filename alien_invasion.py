@@ -52,14 +52,19 @@ class AlienInvasion:
         if self.ship.check_collisions(self.alien_fleet.fleet):
             self._reset_level()
             # subtract one life if possible
+            
         # check collisions for aliens and bottom of screen
-        if self.ship.check_fleet_bottom():
+        if self.alien_fleet.check_fleet_bottom():
             self._reset_level()
         #check collisions of projectiles and aliens
         collisions = self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
         if collisions:
             self.impact.play()
             self.impact.fadeout(500)
+
+        if self.alien_fleet.check_destroyed_status():
+            print('here')
+            self._reset_level()
 
 
 

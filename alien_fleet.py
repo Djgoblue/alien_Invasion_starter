@@ -1,13 +1,13 @@
 import pygame
 from alien import Alien
-from typing import TYPE_CHECKING, Any, Dict, List
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 
 class AlienFleet:
 
-    def __init__(self, game: 'AlienInvasion') -> None:
+    def __init__(self, game: 'AlienInvasion'):
         self.game = game
         self.settings = game.settings
         self.fleet = pygame.sprite.Group()
@@ -16,7 +16,7 @@ class AlienFleet:
 
         self.create_fleet()
 
-    def create_fleet(self) -> None:
+    def create_fleet(self):
         alien_w = self.settings.alien_w
         alien_h = self.settings.alien_h
         screen_w = self.settings.screen_w
@@ -45,7 +45,7 @@ class AlienFleet:
         return x_offset,y_offset
 
 
-    def calculate_fleet_size(self, alien_w, screen_w, alien_h, screen_h) -> tuple[int, int]:
+    def calculate_fleet_size(self, alien_w, screen_w, alien_h, screen_h):
         fleet_w = (screen_w//alien_w)
         fleet_h = ((screen_h /2)//alien_h)
 
@@ -63,12 +63,12 @@ class AlienFleet:
         return int(fleet_w), int(fleet_h)
 
 
-    def _create_alien(self, current_x: int, current_y: int) -> None:
+    def _create_alien(self, current_x: int, current_y: int):
         new_alien = Alien(self, current_x, current_y)
 
         self.fleet.add(new_alien)
 
-    def _check_fleet_edges(self) -> None:
+    def _check_fleet_edges(self):
         alien: Alien 
         for alien in self.fleet:
             if alien.check_edges():
@@ -77,27 +77,30 @@ class AlienFleet:
                 break
 
 
-    def _drop_alien_fleet(self) -> None:
+    def _drop_alien_fleet(self):
         for alien in self.fleet:
             alien.y += self.fleet_drop_speed
 
 
-    def update_fleet(self) -> None:
+    def update_fleet(self):
         self._check_fleet_edges()
         self.fleet.update()
 
 
-    def draw(self) -> None:
+    def draw(self):
         alien: 'Alien'
         for alien in self.fleet:
             alien.draw_alien()
 
-    def check_collisions(self, other_group) -> Dict[Any, List]:
+    def check_collisions(self, other_group):
         return pygame.sprite.groupcollide(self.fleet, other_group, True, True)
     
-    def check_fleet_bottom(self) -> bool:
+    def check_fleet_bottom(self):
         alien: Alien
         for alien in self.fleet:
             if alien.rect.bottom >= self.settings.screen_h:
                 return True
             return False
+        
+    def check_destroyed_status(self):
+        return not self.fleet
