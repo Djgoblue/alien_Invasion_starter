@@ -7,6 +7,7 @@ from arsenal import Arsenal
 #from alien import Alien
 from alien_fleet import AlienFleet
 from time import sleep
+from button import Button
 
 class AlienInvasion:
     """The main class that runs the Alien Invasion game"""
@@ -40,7 +41,9 @@ class AlienInvasion:
         self.ship = Ship(self, Arsenal(self))
         self.alien_fleet = AlienFleet(self)
         self.alien_fleet.create_fleet()
-        self.game_active = True
+
+        self.play_button = Button(self, 'Play')
+        self.game_active = False
 
     def run_game(self):
         """Run the main game loop: handle events, update state, and redraw the screen."""
@@ -83,14 +86,21 @@ class AlienInvasion:
         else:
             self.game_active = False 
         
-
-    
     def _reset_level(self):
         """Clear all bullets and aliens from the screen and rebuild the alien fleet."""
         self.ship.arsenal.arsenal.empty()
         self.alien_fleet.fleet.empty()
         self.alien_fleet.create_fleet()
 
+    def restart_game(self):
+        """Reset game state/start a new game."""
+        #setting up dynamic settings
+        #reset game stats
+        #update HUD scores
+        self._reset_level()
+        self.ship._center_ship()
+        self.game_active = True
+        pygame.mouse.set_visible(False)
 
     def _update_screen(self):
         """Redraw the background, ship, aliens, and bullets, then flip the display."""
@@ -98,6 +108,11 @@ class AlienInvasion:
         self.ship.draw()
         self.alien_fleet.draw()
         self.ship.arsenal.draw()
+
+        if not self.game_active:
+            self.play_button.draw()
+            pygame.mouse.set_visible(True)
+
         pygame.display.flip()
 
     def _check_events(self):
@@ -107,10 +122,18 @@ class AlienInvasion:
                 self.running = False
                 pygame.quit()
                 sys.exit()
-            elif event.type == pygame.KEYDOWN:
+            elif event.type == pygame.KEYDOWN and self.game_active == True:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self._check_button_clicked()
+
+    def _check_button_clicked(self):
+        """Check whether the play button was clicked and restart the game if so."""
+        mouse_pos = pygame.mouse.get_pos()
+        if self.play_button.check_clicked(mouse_pos):
+            self.restart_game()
     
     def _check_keyup_events(self, event):
         """Respond to key-release by stopping ship movement.
