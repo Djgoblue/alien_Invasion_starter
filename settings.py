@@ -1,7 +1,8 @@
 from pathlib import Path
 class Settings:
-    
+    """Stores all configurable settings for the Alien Invasion game"""
     def __init__(self):
+        """Initialize all default game settings and assets."""
         self.name: str = 'Alien Invasion'
         self.screen_w = 1200
         self.screen_h = 800
@@ -28,3 +29,13 @@ class Settings:
         self.fleet_speed = 2
         self.fleet_direction = 1
         self.fleet_drop_speed = 40
+
+        self.button_w = 200
+        self.button_h = 50
+        self.button_color= (0, 135, 50)
+
+        self.text_color = (255, 255, 255)
+        self.button_font_size = 48
+        self.HUD_font_size = 20
+        self.font_file = Path.cwd() / 'Assets' / 'Font' / 'Silkscreen' / 'Silkscreen-Bold.ttf'
+
