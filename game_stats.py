@@ -89,4 +89,4 @@ class GameStats():
     def update_level(self):
         """Increment the level by one."""
         self.level +=1
-        # print(self.level)
+        print(self.level)
